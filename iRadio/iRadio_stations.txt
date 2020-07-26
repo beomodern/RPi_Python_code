@@ -1,0 +1,24 @@
+RMF FM;;http://rmfstream1.interia.pl:8000/rmf_fm
+Radio ZET;;http://zet090-02.cdn.eurozet.pl:8404
+Polskie Radio Jedynka;;http://stream3.polskieradio.pl:8900
+Polskie Radio Jedynka;;http://mp3.polskieradio.pl:8900
+Polskie Radio Dwojka;;http://mp3.polskieradio.pl:8902
+Polskie Radio Trojka;;http://stream3.polskieradio.pl:8904
+Polskie Radio Trojka;;http://mp3.polskieradio.pl:8904
+Radio Zlote Przeboje;;http://mainstream.radioagora.pl/tuba9-1.mp3
+Antyradio FM;;http://ant-kat-01.cdn.eurozet.pl:8604
+Antyradio Warszawa;;http://ant-waw-01.cdn.eurozet.pl:8602
+Radio LUZ;;http://156.17.39.65:8000/luzhifi.mp3
+Nirvana Ambient;;http://81.219.54.6:8002
+Rock Radio;;http://poznan5-4.radio.pionier.net.pl:8000/tuba8-1.mp3
+RTE Radio 1;;http://icecast2.rte.ie/ieradio1
+The Smooth Lounge;;http://listen.radionomy.com/the-smooth-lounge
+BBC Radio 1;;http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio1_mf_p
+BBC Radio 1xtra;;http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio1xtra_mf_p
+BBC Radio 2;;http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio2_mf_p
+BBC Radio 3;;http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio3_mf_p
+BBC Radio 4FM;;http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio4fm_mf_p
+BBC Radio 4 Extra;;http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio4extra_mf_p
+BBC Radio 5 Live;;http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio5live_mf_p
+BBC Radio 6 Music;;http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio6music_mf_p
+BBC World Service News stream;;http://bbcwssc.ic.llnwd.net/stream/bbcwssc_mp1_ws-einws
