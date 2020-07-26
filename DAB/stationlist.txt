@@ -1,0 +1,296 @@
+Automatically generated and machine read file, do not change!
+Volume: 59
+Date of scan (YYYY-MM-DD, HH:MM:SS): 2019-12-30, 16:9:30
+Num. Ensembles: 1
+Ensemble No. 0
+List version: 22
+Freq. Index: 33
+Num services: 12
+Service No. 0
+Service ID. 3810525729
+Srv ref. 545
+Country ID 2
+ECC. 227
+PD Flag 1
+PTY 0
+SRV linking info flag 0
+number components 1
+CA ID 0
+local 0
+SI charset 0
+Label RTE EPG         
+Comp No. 0
+Comp ID 57347
+SubChId 21
+tmid 3
+FIDCId 0
+SCId 3
+DG_flag 0
+CA_flag 0
+ps 1
+ASCTyDSCTy 60
+muA_info_valid 1
+Service No. 1
+Service ID. 8705
+Srv ref. 513
+Country ID 2
+ECC. 227
+PD Flag 0
+PTY 0
+SRV linking info flag 0
+number components 1
+CA ID 0
+local 0
+SI charset 0
+Label RTE Radio 1     
+Comp No. 0
+Comp ID 1
+SubChId 1
+tmid 0
+FIDCId 0
+SCId 3
+DG_flag 0
+CA_flag 0
+ps 1
+ASCTyDSCTy 0
+muA_info_valid 0
+Service No. 2
+Service ID. 8706
+Srv ref. 514
+Country ID 2
+ECC. 227
+PD Flag 0
+PTY 0
+SRV linking info flag 0
+number components 1
+CA ID 0
+local 0
+SI charset 0
+Label RTE 2FM         
+Comp No. 0
+Comp ID 2
+SubChId 2
+tmid 0
+FIDCId 0
+SCId 3
+DG_flag 0
+CA_flag 0
+ps 1
+ASCTyDSCTy 0
+muA_info_valid 1
+Service No. 3
+Service ID. 8707
+Srv ref. 515
+Country ID 2
+ECC. 227
+PD Flag 0
+PTY 0
+SRV linking info flag 0
+number components 1
+CA ID 0
+local 0
+SI charset 0
+Label RTE LYRIC       
+Comp No. 0
+Comp ID 3
+SubChId 3
+tmid 0
+FIDCId 0
+SCId 3
+DG_flag 0
+CA_flag 0
+ps 1
+ASCTyDSCTy 0
+muA_info_valid 0
+Service No. 4
+Service ID. 8708
+Srv ref. 516
+Country ID 2
+ECC. 227
+PD Flag 0
+PTY 0
+SRV linking info flag 0
+number components 1
+CA ID 0
+local 0
+SI charset 0
+Label RTE RnaG        
+Comp No. 0
+Comp ID 4
+SubChId 4
+tmid 0
+FIDCId 0
+SCId 3
+DG_flag 0
+CA_flag 0
+ps 1
+ASCTyDSCTy 0
+muA_info_valid 0
+Service No. 5
+Service ID. 8773
+Srv ref. 581
+Country ID 2
+ECC. 227
+PD Flag 0
+PTY 0
+SRV linking info flag 0
+number components 1
+CA ID 0
+local 0
+SI charset 0
+Label RTE 2XM         
+Comp No. 0
+Comp ID 7
+SubChId 7
+tmid 0
+FIDCId 0
+SCId 3
+DG_flag 0
+CA_flag 0
+ps 1
+ASCTyDSCTy 0
+muA_info_valid 0
+Service No. 6
+Service ID. 8775
+Srv ref. 583
+Country ID 2
+ECC. 227
+PD Flag 0
+PTY 0
+SRV linking info flag 0
+number components 1
+CA ID 0
+local 0
+SI charset 0
+Label RTE Jr Radio    
+Comp No. 0
+Comp ID 6
+SubChId 6
+tmid 0
+FIDCId 0
+SCId 3
+DG_flag 0
+CA_flag 0
+ps 1
+ASCTyDSCTy 0
+muA_info_valid 0
+Service No. 7
+Service ID. 8776
+Srv ref. 584
+Country ID 2
+ECC. 227
+PD Flag 0
+PTY 0
+SRV linking info flag 0
+number components 1
+CA ID 0
+local 0
+SI charset 0
+Label RTE GOLD        
+Comp No. 0
+Comp ID 9
+SubChId 9
+tmid 0
+FIDCId 0
+SCId 3
+DG_flag 0
+CA_flag 0
+ps 1
+ASCTyDSCTy 0
+muA_info_valid 1
+Service No. 8
+Service ID. 8777
+Srv ref. 585
+Country ID 2
+ECC. 227
+PD Flag 0
+PTY 0
+SRV linking info flag 0
+number components 1
+CA ID 0
+local 0
+SI charset 0
+Label RTE PULSE       
+Comp No. 0
+Comp ID 8
+SubChId 8
+tmid 0
+FIDCId 0
+SCId 3
+DG_flag 0
+CA_flag 0
+ps 1
+ASCTyDSCTy 0
+muA_info_valid 1
+Service No. 9
+Service ID. 8778
+Srv ref. 586
+Country ID 2
+ECC. 227
+PD Flag 0
+PTY 0
+SRV linking info flag 0
+number components 1
+CA ID 0
+local 0
+SI charset 0
+Label RTE Radio 1Extra
+Comp No. 0
+Comp ID 10
+SubChId 10
+tmid 0
+FIDCId 0
+SCId 3
+DG_flag 0
+CA_flag 0
+ps 1
+ASCTyDSCTy 0
+muA_info_valid 0
+Service No. 10
+Service ID. 8801
+Srv ref. 609
+Country ID 2
+ECC. 227
+PD Flag 0
+PTY 0
+SRV linking info flag 0
+number components 1
+CA ID 0
+local 0
+SI charset 0
+Label RTE Radio 1 +   
+Comp No. 0
+Comp ID 12
+SubChId 12
+tmid 0
+FIDCId 0
+SCId 3
+DG_flag 0
+CA_flag 0
+ps 1
+ASCTyDSCTy 63
+muA_info_valid 0
+Service No. 11
+Service ID. 8802
+Srv ref. 610
+Country ID 2
+ECC. 227
+PD Flag 0
+PTY 0
+SRV linking info flag 0
+number components 1
+CA ID 0
+local 0
+SI charset 0
+Label RTE 2FM +       
+Comp No. 0
+Comp ID 13
+SubChId 13
+tmid 0
+FIDCId 0
+SCId 3
+DG_flag 0
+CA_flag 0
+ps 1
+ASCTyDSCTy 63
+muA_info_valid 0
