@@ -1,6 +1,6 @@
-12;;9;;33;;10;;8778;;RTE Radio 1Extr
-/home/pi/BeoModern/Player/Kraftwerk;;Kraftwerk/03. Radioactivity.mp3;;22.033
-The Smooth Lounge;;http://listen.radionomy.com/the-smooth-lounge
+12;;2;;33;;2;;8706;;RTE 2FM
+/home/beo/BeoModern/Player/Lou Doillon - Lay Low (2015) [FLAC 96-24];;Lou Doillon - Lay Low (2015) [FLAC 96-24]/01 - Left Behind.flac;;67.115
+RTE Radio 1;;http://icecast2.rte.ie/ieradio1
 
 
 

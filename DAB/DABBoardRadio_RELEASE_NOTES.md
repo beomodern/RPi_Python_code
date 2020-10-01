@@ -1,5 +1,9 @@
 # DABBoardRadio Terminal Radio Software Release Notes
 
+## Version 0.16.4
+* Using firmware version DAB 6.0.6
+* User interface font now brighter and better readable
+
 ## Version 0.16.3
 * Added a feature: the station text (e.g. songname) is shown below the list of stations.
 
