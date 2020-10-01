@@ -1,6 +1,6 @@
 Automatically generated and machine read file, do not change!
-Volume: 59
-Date of scan (YYYY-MM-DD, HH:MM:SS): 2019-12-30, 16:9:30
+Volume: 57
+Date of scan (YYYY-MM-DD, HH:MM:SS): 0-0-0, 0:0:0
 Num. Ensembles: 1
 Ensemble No. 0
 List version: 22
@@ -21,9 +21,9 @@ SI charset 0
 Label RTE EPG         
 Comp No. 0
 Comp ID 57347
-SubChId 21
+SubChId 232
 tmid 3
-FIDCId 0
+FIDCId 1
 SCId 3
 DG_flag 0
 CA_flag 0
@@ -47,7 +47,7 @@ Comp No. 0
 Comp ID 1
 SubChId 1
 tmid 0
-FIDCId 0
+FIDCId 1
 SCId 3
 DG_flag 0
 CA_flag 0
@@ -71,7 +71,7 @@ Comp No. 0
 Comp ID 2
 SubChId 2
 tmid 0
-FIDCId 0
+FIDCId 1
 SCId 3
 DG_flag 0
 CA_flag 0
@@ -95,7 +95,7 @@ Comp No. 0
 Comp ID 3
 SubChId 3
 tmid 0
-FIDCId 0
+FIDCId 1
 SCId 3
 DG_flag 0
 CA_flag 0
@@ -119,7 +119,7 @@ Comp No. 0
 Comp ID 4
 SubChId 4
 tmid 0
-FIDCId 0
+FIDCId 1
 SCId 3
 DG_flag 0
 CA_flag 0
@@ -143,7 +143,7 @@ Comp No. 0
 Comp ID 7
 SubChId 7
 tmid 0
-FIDCId 0
+FIDCId 1
 SCId 3
 DG_flag 0
 CA_flag 0
@@ -167,7 +167,7 @@ Comp No. 0
 Comp ID 6
 SubChId 6
 tmid 0
-FIDCId 0
+FIDCId 1
 SCId 3
 DG_flag 0
 CA_flag 0
@@ -191,7 +191,7 @@ Comp No. 0
 Comp ID 9
 SubChId 9
 tmid 0
-FIDCId 0
+FIDCId 1
 SCId 3
 DG_flag 0
 CA_flag 0
@@ -215,7 +215,7 @@ Comp No. 0
 Comp ID 8
 SubChId 8
 tmid 0
-FIDCId 0
+FIDCId 1
 SCId 3
 DG_flag 0
 CA_flag 0
@@ -239,7 +239,7 @@ Comp No. 0
 Comp ID 10
 SubChId 10
 tmid 0
-FIDCId 0
+FIDCId 1
 SCId 3
 DG_flag 0
 CA_flag 0
@@ -263,7 +263,7 @@ Comp No. 0
 Comp ID 12
 SubChId 12
 tmid 0
-FIDCId 0
+FIDCId 1
 SCId 3
 DG_flag 0
 CA_flag 0
@@ -287,7 +287,7 @@ Comp No. 0
 Comp ID 13
 SubChId 13
 tmid 0
-FIDCId 0
+FIDCId 1
 SCId 3
 DG_flag 0
 CA_flag 0

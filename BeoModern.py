@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 ################################################################################
 # Code to run on Raspberry Pi to handle BeoModern operation
 #
@@ -26,6 +28,7 @@ import serial
 
 # import system functions
 import subprocess
+import unicodedata
 import os
 import re
 import textwrap
@@ -47,7 +50,7 @@ ser = serial.Serial(
     parity=serial.PARITY_NONE,
     stopbits=serial.STOPBITS_ONE,
     bytesize=serial.EIGHTBITS,
-    timeout=0#.1 #4CHANGE LATER ON - CHANGE LATER ON - CHANGE LATER ON
+    timeout=4
 )
 
 
@@ -61,66 +64,16 @@ def log(s):
 
 # UART reading function
 def command_read():
-    if ser.inWaiting():             
+    if ser.inWaiting():
 # check if there is new data in UART buffer waiting to be read back
 # read data from buffer untill '+' symbol is received or timeout is reached
-#        command = ser.read_until('+'.encode('UTF-8')).decode('UTF-8')
-# REMOVE REMOVE 
-# read one caracter and compare it to its binary representaiton - temporary solution
-        command =  ser.read(1)
-        if command == b'w':
-            command = "-UP+"
-        elif command == b's':
-            command = "-DOWN+"
-        elif command == b'a':
-            command = "-BACK+"
-        elif command == b'd':
-            command = "-NEXT+"
-        elif command == b'o':
-            command = "-GO+"
-        elif command == b'p':
-            command = "-STOP+"
-        elif command == b'1':
-            command = "-Player+"
-        elif command == b'2':
-            command = "-iRadio+"
-        elif command == b'3':
-            command = "-DAB+"
-        elif command == b'4':
-            command = "-RDS+"
-        elif command == b'z':
-            command = "-FM_01+"
-        elif command == b'x':
-            command = "-FM_02+"
-        elif command == b'c':
-            command = "-FM_03+"
-        elif command == b'v':
-            command = "-FM_04+"
-        elif command == b'b':
-            command = "-FM_05+"
-        elif command == b'n':
-            command = "-FM_06+"
-        elif command == b'm':
-            command = "-FM_07+"
-        elif command == b',':
-            command = "-FM_08+"
-        elif command == b'.':
-            command = "-FM_09+"
-        elif command == b'y':
-            command = "-SHUTDOWN+"
-# REMOVE REMOVE 
-#        log('UART read back = %s' % (command))
-# REMOVE REMOVE 
-        else:
-            log('Wrong UART readback letter = %s' % (command))
-            return False
-# REMOVE REMOVE 
+        command = ser.read_until('+'.encode('UTF-8')).decode('UTF-8')
         if command.startswith('-') and command.endswith('+'): 
 # check if start '-' and end '+' message symbols are as expected
             command = command[1:-1] 
 # strip out start '-' and end '+' command symbol
             log('New command = %s' % (command))
-            return command          
+            return command
 # return new command
         else:
             log('UART wrong start/stop')
@@ -132,19 +85,19 @@ def command_read():
 
 
 # function responsible for correct formatting information sent over UART
-# to be presented on 16 alphanumeric display
+# to be presented on 24 alphanumeric display
 def display(mode, previous_time=0, **display_data):
 
-    
+
 # displaying DAB station browsing
     if mode == 'DAB_browsing':
 # check if expected time passed and display needs to be updated
-        if time.monotonic() <= previous_time + 1:
+        if time.monotonic() <= previous_time + 0.5:
 # if expected delay time didn't pass return the same time stamp and do nothing
             return (previous_time, display_data['rolling_station'])
         else:
 # calculate size of radio station nubmers information
-            space = (15 - len(str(display_data['station_number']) + '/'
+            space = (23 - len(str(display_data['station_number']) + '/'
               + str(display_data['number_of_stations'])))
 # print over UART radio numbers info
             (ser.write(bytes(str(display_data['station_number']) 
@@ -155,6 +108,8 @@ def display(mode, previous_time=0, **display_data):
 # wrap radio station name into space left after radio station nubmer info
             wrapper = textwrap.TextWrapper(width=space, break_on_hyphens = False)
             title_list = wrapper.wrap(text=display_data['rolling_station'])
+# encode test by removing special caracters not to confuse display. keep it simple at basic ASCII
+            title_list[0] = unicodedata.normalize('NFKD', title_list[0]).encode('ascii','ignore').decode('ascii')
 # check if informaiton to display is shorter then available display space
             if len(title_list[0]) < space:
 # if it is, fill reminig space with spaces
@@ -190,10 +145,12 @@ def display(mode, previous_time=0, **display_data):
             return (previous_time, display_data['rolling_station'])
         else:
 # display space
-            space = 16
+            space = 24
 # wrap file name into available space 
             wrapper = textwrap.TextWrapper(width=space, break_on_hyphens = False)
             title_list = wrapper.wrap(text=display_data['rolling_station'])
+# encode test by removing special caracters not to confuse display. keep it simple at basic ASCII
+            title_list[0] = unicodedata.normalize('NFKD', title_list[0]).encode('ascii','ignore').decode('ascii')
 # check if informaiton to display is shorter then available display space
             if len(title_list[0]) < space:
 # if it is, fill reminig space with spaces
@@ -220,15 +177,15 @@ def display(mode, previous_time=0, **display_data):
 # together with full sradio station name to start rolling again
                 return (time.monotonic(), display_data['station'])
 
-        
+
     elif mode == 'Player_folder_browsing':
 # check if expected time passed and display needs to be updated
-        if time.monotonic() <= previous_time + 1:
+        if time.monotonic() <= previous_time + 0.5:
 # if expected delay time didn't pass return the same time stamp and do nothing
             return (previous_time, display_data['rolling_name'])
         else:
 # calculate size of folder nubmers information
-            space = (15 - len(str(display_data['folder_number']) + '/'
+            space = (23 - len(str(display_data['folder_number']) + '/'
               + str(display_data['number_of_folders'])))
 # print over UART folder numbers
             (ser.write(bytes(str(display_data['folder_number'])
@@ -240,6 +197,8 @@ def display(mode, previous_time=0, **display_data):
 # change letters to upper characters
             wrapper = textwrap.TextWrapper(width=space)
             name_list = wrapper.wrap(text=display_data['rolling_name'].upper())
+# encode test by removing special caracters not to confuse display. keep it simple at basic ASCII
+            name_list[0] = unicodedata.normalize('NFKD', name_list[0]).encode('ascii','ignore').decode('ascii')
 # check if informaiton to display is shorter then available display space
             if len(name_list[0]) < space:
 # if it is, fill reminig space with spaces
@@ -266,15 +225,15 @@ def display(mode, previous_time=0, **display_data):
 # together with full folder name to start rolling again
                 return (time.monotonic(), display_data['name'])
 
-          
+
     elif mode == 'Player_file_browsing':
 # check if expected time passed and display needs to be updated
-        if time.monotonic() <= previous_time + 1:
+        if time.monotonic() <= previous_time + 0.5:
 # if expected delay time didn't pass return the same time stamp and do nothing
             return (previous_time, display_data['rolling_title'])
         else:
 # calculate size of song nubmers information
-            space = (15 - len(str(display_data['song_number']) + '/'
+            space = (23 - len(str(display_data['song_number']) + '/'
               + str(display_data['number_of_songs'])))
 # print over UART song numbers
             (ser.write(bytes(str(display_data['song_number']) 
@@ -285,6 +244,8 @@ def display(mode, previous_time=0, **display_data):
 # wrap file name into space left after file nubmer info
             wrapper = textwrap.TextWrapper(width=space, break_on_hyphens = False)
             title_list = wrapper.wrap(text=display_data['rolling_title'])
+# encode test by removing special caracters not to confuse display. keep it simple at basic ASCII
+            title_list[0] = unicodedata.normalize('NFKD', title_list[0]).encode('ascii','ignore').decode('ascii')
 # check if informaiton to display is shorter then available display space
             if len(title_list[0]) < space:
 # if it is, fill reminig space with spaces
@@ -311,7 +272,7 @@ def display(mode, previous_time=0, **display_data):
 # together with full song title to start rolling again
                 return (time.monotonic(), display_data['title'])
 
-          
+
     elif mode == 'Player_listening':
 # check if expected time passed and display needs to be updated
         if time.monotonic() <= previous_time + 1:
@@ -319,10 +280,12 @@ def display(mode, previous_time=0, **display_data):
             return (previous_time, display_data['rolling_title'])
         else:
 # calculate size of song remaining time information
-            space = 15 - len(str(display_data['remaining_time']))
+            space = 23 - len(str(display_data['remaining_time']))
 # wrap file name into space left after remiaining time info
             wrapper = textwrap.TextWrapper(width=space, break_on_hyphens = False)
             title_list = wrapper.wrap(text=display_data['rolling_title'])
+# encode test by removing special caracters not to confuse display. keep it simple at basic ASCII
+            title_list[0] = unicodedata.normalize('NFKD', title_list[0]).encode('ascii','ignore').decode('ascii')
 # check if informaiton to display is shorter then available display space
             if len(title_list[0]) < space:
 # if it is, fill reminig space with spaces
@@ -331,7 +294,7 @@ def display(mode, previous_time=0, **display_data):
 # if no issue with spaces, display whole line from list
                 to_display = title_list[0]
 # print over UART part of file name and remining time in seconds
-            ser.write(bytes(to_display + ' ' + str(display_data['remaining_time']) + ';P\r\n', 'UTF-8'))
+            ser.write(bytes(to_display + ' ' + str(display_data['remaining_time']) + ';P\r\n', 'ASCII', 'ignore'))
 # check if remining part of song title can fit into remining display space
             if len(title_list) > 1:
 # if no, return new time stamp from which delay will be checked next time
@@ -347,17 +310,17 @@ def display(mode, previous_time=0, **display_data):
             else:
 # if yes, return new time stamp from which delay will be checked next time
 # together with full song title to start rolling again
-                return (time.monotonic(), display_data['title'])
- 
-        
+                return (time.monotonic(), display_data['title']) 
+
+
     elif mode == 'iRadio_browsing':
 # check if expected time passed and display needs to be updated
-        if time.monotonic() <= previous_time + 1:
+        if time.monotonic() <= previous_time + 0.5:
 # if expected delay time didn't pass return the same time stamp and do nothing
             return (previous_time, display_data['rolling_station'])
         else:
 # calculate size of radio station nubmers information
-            space = (15 - len(str(display_data['iRadio_station_number']) + '/'
+            space = (23 - len(str(display_data['iRadio_station_number']) + '/'
               + str(display_data['number_of_iRadio_stations'])))
 # print over UART radio numbers info
             (ser.write(bytes(str(display_data['iRadio_station_number']) 
@@ -368,6 +331,8 @@ def display(mode, previous_time=0, **display_data):
 # wrap radio station name into space left after iRadio station nubmer info
             wrapper = textwrap.TextWrapper(width=space, break_on_hyphens = False)
             title_list = wrapper.wrap(text=display_data['rolling_station'])
+# encode test by removing special caracters not to confuse display. keep it simple at basic ASCII
+            title_list[0] = unicodedata.normalize('NFKD', title_list[0]).encode('ascii','ignore').decode('ascii')
 # check if informaiton to display is shorter then available display space
             if len(title_list[0]) < space:
 # if it is, fill reminig space with spaces
@@ -400,7 +365,7 @@ def display(mode, previous_time=0, **display_data):
                 return (time.monotonic(), display_data['station'])
 
 
-        
+
     elif mode == 'iRadio_listening':
 # check if expected time passed and display needs to be updated
         if time.monotonic() <= previous_time + 1.5:
@@ -408,10 +373,12 @@ def display(mode, previous_time=0, **display_data):
             return (previous_time, display_data['rolling_station'])
         else:
 # display space
-            space = 16
+            space = 24
 # wrap file name into available space 
             wrapper = textwrap.TextWrapper(width=space, break_on_hyphens = False)
             title_list = wrapper.wrap(text=display_data['rolling_station'])
+# encode test by removing special caracters not to confuse display. keep it simple at basic ASCII
+            title_list[0] = unicodedata.normalize('NFKD', title_list[0]).encode('ascii','ignore').decode('ascii')
 # check if informaiton to display is shorter then available display space
             if len(title_list[0]) < space:
 # if it is, fill reminig space with spaces
@@ -450,10 +417,12 @@ def display(mode, previous_time=0, **display_data):
             return (previous_time, display_data['rolling_station'])
         else:
 # display space
-            space = 16
+            space = 24
 # wrap file name into available space 
             wrapper = textwrap.TextWrapper(width=space, break_on_hyphens = False)
             title_list = wrapper.wrap(text=display_data['rolling_station'])
+# encode test by removing special caracters not to confuse display. keep it simple at basic ASCII
+            title_list[0] = unicodedata.normalize('NFKD', title_list[0]).encode('ascii','ignore').decode('ascii')
 # check if informaiton to display is shorter then available display space
             if len(title_list[0]) < space:
 # if it is, fill reminig space with spaces
@@ -485,10 +454,10 @@ def display(mode, previous_time=0, **display_data):
 # if yes, return new time stamp from which delay will be checked next time
 # together with full radio station name or RDS data to start rolling again
                 return (time.monotonic(), display_data['station'])
-        
+
     elif mode == 'message':
-# simply sent to display message         
-        space = 16
+# simply sent to display message
+        space = 24
 # wrap file name into available space 
         wrapper = textwrap.TextWrapper(width=space, break_on_hyphens = False)
         title_list = wrapper.wrap(text=display_data['info'])
@@ -501,8 +470,8 @@ def display(mode, previous_time=0, **display_data):
             to_display = title_list[0]
 # print over UART part of radio station name or RDS data
         ser.write(bytes(to_display + ';M\r\n', 'UTF-8'))
-        return 
-              
+        return
+
 
 
 
@@ -534,13 +503,13 @@ def store_recall(mode, operation, **to_store):
 # check if function shoudl restore
     if operation == 'recall':
 # open and read back last settings from BeoModern_init_settings.txt file. 
-        with open('BeoModern_init_settings.txt', 'r') as saved_settings:
+        with open('/home/beo/BeoModern/BeoModern_init_settings.txt', 'r') as saved_settings:
             lines = saved_settings.readlines()
 # close BeoModern_init_settings.txt file
         saved_settings.close()
 
-                        
-# check if restorign DAB parameters        
+
+# check if restorign DAB parameters
         if mode == 'DAB':
 # DAB radio data format: first;;second;;....
 #    first = number of all detected stations
@@ -554,7 +523,7 @@ def store_recall(mode, operation, **to_store):
             return (dab_settings)
 
 
-# check if restorign iRadio parameters        
+# check if restorign iRadio parameters
         elif mode == 'iRadio':
 # iRadio radio data format: first;;second;;....
 #    first = internet Radio station name
@@ -563,7 +532,7 @@ def store_recall(mode, operation, **to_store):
 # return list with last Player settigns 
             return (iRadio_settings)
 
-            
+
 # check if restorign Player parameters
         elif mode == 'Player':
 # Player data format in second line: first;;second;;....
@@ -574,15 +543,15 @@ def store_recall(mode, operation, **to_store):
 # return list with last Player settigns 
             return (Player_settings)
 
-            
+
         else:
             return False
- 
-            
-# check if function shoudl save        
+
+
+# check if function shoudl save
     if operation == "store":
 # open and read back BeoModern_init_settings.txt file into variable lines 
-        with open('BeoModern_init_settings.txt', 'r') as saved_settings:
+        with open('/home/beo/BeoModern/BeoModern_init_settings.txt', 'r') as saved_settings:
             lines = saved_settings.readlines()
 # close BeoModern_init_settings.txt file
         saved_settings.close()
@@ -605,8 +574,8 @@ def store_recall(mode, operation, **to_store):
              str(to_store['Comp_ID']) + ';;' +
              str(to_store['Service_ID']) + ';;' +
              str(to_store['Label']) + '\n')
-# open and write back BeoModern_init_settings.txt file with new line 0 content         
-            with open('BeoModern_init_settings.txt', 'w') as saved_settings:
+# open and write back BeoModern_init_settings.txt file with new line 0 content
+            with open('/home/beo/BeoModern/BeoModern_init_settings.txt', 'w') as saved_settings:
                 saved_settings.writelines(lines)
 # close BeoModern_init_settings.txt file
             saved_settings.close()
@@ -619,8 +588,8 @@ def store_recall(mode, operation, **to_store):
             lines[2] = (
              str(to_store['iRadio_name']) + ';;' +
              str(to_store['iRadio_address']) + '\n')
-# open and write back BeoModern_init_settings.txt file with new line 2 content         
-            with open('BeoModern_init_settings.txt', 'w') as saved_settings:
+# open and write back BeoModern_init_settings.txt file with new line 2 content
+            with open('/home/beo/BeoModern/BeoModern_init_settings.txt', 'w') as saved_settings:
                 saved_settings.writelines(lines)
 # close BeoModern_init_settings.txt file
             saved_settings.close()
@@ -634,8 +603,8 @@ def store_recall(mode, operation, **to_store):
              str(to_store['path']) + ';;' +
              str(to_store['file_name']) + ';;' +
              str(to_store['position']) + '\n')
-# open and write back BeoModern_init_settings.txt file with new line 1 content         
-            with open('BeoModern_init_settings.txt', 'w') as saved_settings:
+# open and write back BeoModern_init_settings.txt file with new line 1 content
+            with open('/home/beo/BeoModern/BeoModern_init_settings.txt', 'w') as saved_settings:
                 saved_settings.writelines(lines)
 # close BeoModern_init_settings.txt file
             saved_settings.close()
@@ -644,7 +613,7 @@ def store_recall(mode, operation, **to_store):
 
         else:
             return False
-        
+
 
 
 
@@ -729,7 +698,7 @@ class Player(State):
     def __init__(self):
         super().__init__()
 # initialize general variables
-        self.PATH = '/home/pi/BeoModern/Player' 
+        self.PATH = '/home/beo/BeoModern/Player' 
         self.folder_file_combo = 0      
 # initialize varibles for active song names and their locations
         self.CURRENT_PATH = []
@@ -772,7 +741,7 @@ class Player(State):
 
     def enter(self, machine):
         log('state_Player = Enter')
-
+        print ('stating Player')
 # restore last Player settings from disk file
         self.stored_settings = store_recall("Player", "recall")
 
@@ -823,24 +792,25 @@ class Player(State):
         self.NEW_PATH = self.CURRENT_PATH
        
 # format path for mpc - remove absolute path and format it in reference to 
-# default '/home/pi/BeoModern/Player' mpc folder
+# default '/home/beo/BeoModern/Player' mpc folder
         self.mpc_file_to_play = (re.sub(self.PATH, '', 
                                   os.path.join(self.CURRENT_PATH, 
                                   self.file_list[self.now_playing_number]))
                                   [1:])
 
-
 # set pointer to MPD client
         self.client = MPDClient()
 # set delay timeouts
         self.client.timeout = 15
-        self.client.idletimeout = None
+        self.client.idletimeout =2
 # establish conenction with MPD server
         self.client.connect("127.0.0.1", 6600)
+# update song database - re-scan folder
+        self.client.update()
 # set mpd to play in single mode
         self.client.single(1)
 # set mpd volume to 100%
-        self.client.setvol(100)
+#        self.client.setvol(100)
 # clear mpd queue       
         self.client.clear()
 # add file to mpd queue
@@ -1180,8 +1150,10 @@ class Player(State):
 # calculate song/file combo based on current song + nubmer of sub-folders               
                         self.folder_file_combo = self.now_playing_number + 1 + len(self.folder_list)
 # format path for mpc - remove absolute path and format it in reference to 
-# mpc path forlder set by default to '/home/pi/BeoModern/Player' folder
+# mpc path forlder set by default to '/home/beo/BeoModern/Player' folder
                         self.mpc_file_to_play = re.sub(self.PATH, '', os.path.join(self.CURRENT_PATH, self.file_list[self.now_playing_number]))[1:]
+# update mpd database - re-scan folder with music files
+                        self.client.update()
 # clear mpd queue       
                         self.client.clear()
 # add file to mpd queue
@@ -1223,7 +1195,7 @@ class Player(State):
 # set display flag - reset rolling name
             self.display_flag = 1             
 # format path for mpc - remove absolute path and format it in reference to 
-# mpc path forlder set by default to '/home/pi/BeoModern/Player' folder
+# mpc path forlder set by default to '/home/beo/BeoModern/Player' folder
             self.mpc_file_to_play = re.sub(self.PATH, '', os.path.join(self.CURRENT_PATH, self.file_list[self.now_playing_number]))[1:]
 # clear mpd queue       
             self.client.clear()
@@ -1335,11 +1307,12 @@ class iRadio(State):
         return 'iRadio'
 
     def enter(self, machine):
+        print ('starting iRadio')
 # log indicator that iRadio enter state was executed       
         log('state_iRadio = Enter')
 # at entering iRadio, parse iRadio_stations.txt file searching for number of 
 # available internet radio stations
-        with open('/home/pi/BeoModern/iRadio/iRadio_stations.txt', 'r') as iRadio_station_list:
+        with open('/home/beo/BeoModern/iRadio/iRadio_stations.txt', 'r') as iRadio_station_list:
             self.iRadio_stations = iRadio_station_list.readlines()
 # close iRadio_stations.txt file
         iRadio_station_list.close()
@@ -1378,13 +1351,13 @@ class iRadio(State):
             self.client = MPDClient()
 # set delay timeouts
             self.client.timeout = 20
-            self.client.idletimeout = None
+            self.client.idletimeout = 2
 # establish conenction with MPD server
             self.client.connect("127.0.0.1", 6600)
 # set mpd to play in single mode
             self.client.single(1)
 # set mpd volume to 100%
-            self.client.setvol(100)
+#            self.client.setvol(100)
 # clear mpd queue       
             self.client.clear()
 # add iRadio station address to mpd queue
@@ -1667,16 +1640,16 @@ class DAB(State):
 # Use nested dictionaries to store data
 # Implementation utilize Service Number as radio station indicator
 # This scan function assumes only one Frequency Index for channel list
-
-        with open('/home/pi/BeoModern/DAB/stationlist.txt', 'r') as self.dab_station_list:
+        print ('starting DAB')
+        with open('/home/beo/BeoModern/DAB/stationlist.txt', 'r') as self.dab_station_list:
             for row in self.dab_station_list:
                 if 'Freq. Index:' in row:
                     Freq_Index = row.strip('Freq. Index: \t\n\r')
-                    
+
                 if 'Service No.' in row:
                     Service_No = int(row.strip('Service No. \t\n\r'))
                     sortet_stationlist[Service_No]['Freq_Index'] = Freq_Index
-                                
+
                 if 'Service ID.' in row:
                     Service_ID = row.strip('Service ID. \t\n\r')
                     sortet_stationlist[Service_No]['Service_ID'] = Service_ID
@@ -1684,7 +1657,7 @@ class DAB(State):
                 if 'Label' in row:
                     Label = row.strip('Label \t\n\r')
                     sortet_stationlist[Service_No]['Label'] = Label
-                    
+
                 if 'Comp ID' in row:
                     Comp_ID = row.strip('Comp ID \t\n\r')
                     sortet_stationlist[Service_No]['Comp_ID'] = Comp_ID
@@ -1695,7 +1668,7 @@ class DAB(State):
         self.number_of_station = int(dab_settings[0])
         self.current_station = int(dab_settings[1])
         self.new_station = self.current_station
-        
+
 # DEBUG REMOVE DEBUG REMOVE
 #        print(dab_settings[0])    # pull number of all detected stations
 #        print(dab_settings[1])    # pull last tuned station number
@@ -1707,7 +1680,7 @@ class DAB(State):
 
 # start DAB radio software with restored parameters
         output, error = (subprocess.Popen(['sudo', 
-          '/home/pi/BeoModern/DAB/radio_cli_v1.4.0', 
+          '/home/beo/BeoModern/DAB/radio_cli_v1.4.0', 
           '-b', 'D', 
           '-o', '1', 
           '-c', dab_settings[3], 
@@ -1739,7 +1712,7 @@ class DAB(State):
         log('state_DAB = Exit')
 # close DAB radio software 
         output, error = (subprocess.Popen(['sudo', 
-          '/home/pi/BeoModern/DAB/radio_cli_v1.4.0', 
+          '/home/beo/BeoModern/DAB/radio_cli_v1.4.0', 
           '-k'], 
           shell=False, 
           stdout=subprocess.PIPE).communicate())
@@ -1803,7 +1776,7 @@ class DAB(State):
                     self.current_station = self.new_station
                     log('receive GO command')
                     output, error = (subprocess.Popen(['sudo', 
-                      '/home/pi/BeoModern/DAB/radio_cli_v1.4.0', 
+                      '/home/beo/BeoModern/DAB/radio_cli_v1.4.0', 
                       '-b', 'D', 
                       '-o', '1', 
                       '-c', sortet_stationlist[self.current_station]['Comp_ID'] , 
@@ -1825,7 +1798,7 @@ class DAB(State):
         if self.new_station == self.current_station:
 # check if new DAB station update was received
             output, error = (subprocess.Popen(['sudo', 
-              '/home/pi/BeoModern/DAB/radio_cli_v1.4.0', 
+              '/home/beo/BeoModern/DAB/radio_cli_v1.4.0', 
               '-D'], 
               stdout=subprocess.PIPE).communicate())
             log(error)
@@ -1861,10 +1834,10 @@ class DAB(State):
 # log new song name             
             log(str(sortet_stationlist[self.new_station]['Label']))  
         pass
-            
-            
-            
-            
+
+
+
+
 ################################################################################
 # FM RDS Receiver sub-state machine
 # used to display FM staion names read from file
@@ -1890,17 +1863,18 @@ class RDS(State):
 
 
     def enter(self, machine):
+        print ('startign RDS')
         log('state_RDS = Enter')
 # at entering RDS, parse RDS_stations.txt file to build array with 
 # FM radio station numbers, frequencies and names separated by ";;"
 # those names will be displayed in absence of RDS information
-        with open('/home/pi/BeoModern/RDS/RDS_stations.txt', 'r') as RDS_station_list:
+        with open('/home/beo/BeoModern/RDS/RDS_stations.txt', 'r') as RDS_station_list:
             self.RDS_stations = RDS_station_list.readlines()
 # close RDS_stations.txt file
         RDS_station_list.close()
-# move to update state        
+# move to update state
         State.update(self, machine)
-        
+
 
     def exit(self, machine):
         log('state_RDS = Exit')
@@ -1930,7 +1904,7 @@ class RDS(State):
 # start FM radio software with freqeuncy read from file
 # audio output in I2S format available on the same port as DAB radio
                 output, error = (subprocess.Popen(['sudo', 
-                  '/home/pi/BeoModern/RDS/radio_cli_v1.4.0', 
+                  '/home/beo/BeoModern/RDS/radio_cli_v1.4.0', 
                   '-b', 'F', 
                   '-o', '1', 
                   '-F', str(int(float(self.RDS_stations[int(command[3:])-1].split(';;')[1]) * 1000)), 
@@ -1949,13 +1923,13 @@ class RDS(State):
           station = self.to_display))
 # log currently played iRadio station name
         log(self.to_display) 
-        
-        
+
+
 # check if radio statio is tuned to some FM frequency
         # if self.radio_tunned_flag == 1:
 # # check if current FM station status and RDS data by reading message status
             # output, error = (subprocess.Popen(['sudo', 
-              # '/home/pi/BeoModern/RDS/radio_cli_v1.4.0', 
+              # '/home/beo/BeoModern/RDS/radio_cli_v1.4.0', 
               # '-r'], 
               # stdout=subprocess.PIPE).communicate())
             # log(error)
@@ -2018,7 +1992,7 @@ class SHUTDOWN(State):
         subprocess.Popen(['sudo', 'shutdown', '-h', 'now'], 
           shell=False, 
           stdout=subprocess.PIPE).communicate()
-        
+
 
 
 
@@ -2061,10 +2035,10 @@ while True:
             BeoModern_machine.go_to_state('RDS')
             break
         elif command == 'SHUTDOWN':
-            BeoModern_machine.go_to_state('SHUTDOWN')              
+            BeoModern_machine.go_to_state('SHUTDOWN')
             break
 
 
 while True:
     BeoModern_machine.update()
-    
+

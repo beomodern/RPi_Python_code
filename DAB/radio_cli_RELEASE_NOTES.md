@@ -1,5 +1,15 @@
 # radio_cli Release Notes
 
+## Version 2.0.2
+* Fixed bug which prevented FM tuning on a non-FMHD Si468x chip
+
+## Version 2.0.1
+* Now decoding FMHD radio, if available for a certain FM frequency
+
+## Version 2.0.0
+* Improved the -j flag. When used, it will now suppress the output of static text and always return a json or a json encapsulated error message.
+* Firmware updated to DAB v6.0.6 and FMHD v5.1.3
+
 ## Version 1.4.0
 * The station's text (e.g. name of the song) can now be output using the new -D command. Works only after the station has sent new data.
 
